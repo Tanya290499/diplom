@@ -1,0 +1,5 @@
+#1 div.menu>ul>li:nth-of-type(3) > a
+#2 div.flex-none.flex:nth-of-type(2) > div > h2
+#3 ul.list-tags>li:nth-of-type(3)>a
+#4 div#gspb_button-id-gsbp-9332c5bd-3bd3>a
+#5 p>div.line:last-of-type>div.word>div.char
