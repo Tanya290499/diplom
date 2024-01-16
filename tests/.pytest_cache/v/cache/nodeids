@@ -1,0 +1,11 @@
+[
+  "test_api.py::test_api_1",
+  "test_api.py::test_api_2",
+  "test_api.py::test_api_3",
+  "test_api.py::test_api_4",
+  "test_api.py::test_api_5",
+  "test_autorization.py::test_login",
+  "test_zalando.py::test_favourites",
+  "test_zalando.py::test_login",
+  "test_zalando.py::test_register"
+]
