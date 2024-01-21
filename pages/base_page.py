@@ -166,3 +166,6 @@ class BasePage:
         with allure.step("Принять cookies"):
             accept_button = self.find_element(autorization_page_locators.cookies_accept_button)
             accept_button.click()
+
+    def convert_price_text_to_number(self, price_text):
+        return float(price_text.replace("zł", "").replace(" ", "").replace(",", "."))

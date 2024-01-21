@@ -1,19 +1,19 @@
-import requests
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import pytest, requests, logging
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import base64
-from selenium.webdriver import DesiredCapabilities
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.proxy import *
 from fp.fp import FreeProxy
 
 
 @pytest.fixture()
 def driver():
+    credentials = {
+        "firstName": 'John',
+        "lastName": 'Doe',
+        "email": 'zyt15524@zbockeer.com',
+        "password": '12223fret4t5g555'
+    }
+
     options = Options()
     proxy = FreeProxy(country_id='PL', timeout=0.3, rand=True).get()
     pro = '209.121.164.50'
@@ -27,5 +27,7 @@ def driver():
     driver.maximize_window()
     driver.accept_untrusted_certs = True
     driver.implicitly_wait(10)
+    driver.credentials = credentials
+
     yield driver
     driver.quit()

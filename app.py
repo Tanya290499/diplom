@@ -5,23 +5,33 @@ from flask import Flask, render_template
 
 app = Flask(__name__, template_folder='template')
 
+@app.route("/run-ui")
+def run_ui():
+    """Эта функция запускает и отвечает за процесс возврата результата test selenium"""
 
-@app.route('/welcome')
-def welcome():
-    """ Эта функция запуская и отвечает за процесс возврата результата welcome.html. """
+    cmd = ["./script/selenium.sh"]
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE,
+                          stdin=subprocess.PIPE,
+                          universal_newlines=True) as result:
+        out = result.communicate()
+    return out
 
-    return render_template('welcome.html')
+@app.route("/run-api")
+def run_api():
+    """Эта функция запускает и отвечает за процесс возврата результата api test"""
 
-
-@app.route("/error")
-def error():
-    """Эта функция запуская и отвечает за процесс возврата результата test_error.html."""
-    return render_template('test_error.html')
-
+    cmd = ["./script/api.sh"]
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE,
+                          stdin=subprocess.PIPE,
+                          universal_newlines=True) as result:
+        out = result.communicate()
+    return out
 
 @app.route("/runallure")
 def run_allure():
-    """ Эта функция запуская и отвечает за генерацию отчета allure. """
+    """ Эта функция запускает и отвечает за генерацию отчета allure. """
 
     cmd = ["./scriptsh/runallure.sh"]
     with subprocess.Popen(cmd, stdout=subprocess.PIPE,
@@ -29,7 +39,7 @@ def run_allure():
                           stdin=subprocess.PIPE,
                           universal_newlines=True) as result:
         out = result.communicate()
-    return render_template('welcome.html', text=out, json=out)
+    return out
 
 
 @app.route("/")

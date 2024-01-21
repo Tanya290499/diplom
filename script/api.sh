@@ -1,4 +1,4 @@
 #!/bin/zsh
-cd ../../
+cd ../
 pwd
-pytest -s -v class_work/test_api.py --alluredir=results
+pytest -s -v tests/test_api.py --alluredir=results
