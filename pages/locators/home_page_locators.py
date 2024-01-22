@@ -25,6 +25,7 @@ picture_second = (
     By.XPATH, "(//img[@class='sDq_FX lystZ1 FxZV-M _2Pvyxl JT3_zV EKabf7 mo6ZnF _1RurXL mo6ZnF _7ZONEy'])[2]"
 )
 search_input = (By.XPATH, "//input[@id='header-search-input']")
+search_input_clear_button = (By.XPATH, "//button[@class='w5w9i_ l_QGWg']")
 
 top_button = (
     By.XPATH,

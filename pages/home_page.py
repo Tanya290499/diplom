@@ -1,10 +1,12 @@
 import platform
 import time
 
+from selenium.common import NoSuchElementException
 from selenium.webdriver import Keys
 
 import allure
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 
 from pages.base_page import BasePage
 from pages.locators import autorization_page_locators, home_page_locators, clothes_page_locators
@@ -19,7 +21,7 @@ class HomePage(BasePage):
         with allure.step("Перейти на главную страницу"):
             self.driver.get('https://www.zalando.pl/kobiety-home/')
             time.sleep(3)
-            # self.accept_cookies()
+            self.accept_cookies()
 
     def go_to_cart_page(self):
         with allure.step("Нажать на кнопку корзины"):
@@ -33,13 +35,12 @@ class HomePage(BasePage):
 
     def scroll_to_bottom(self):
         with allure.step("Пролистать до низа страницы"):
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            self.driver.find_element(By.XPATH, "//body").send_keys(Keys.END)
             time.sleep(1)
 
     def scroll_to_newsletter(self):
         with allure.step("Пролистать до подписки на новости"):
-            element = self.find_element(home_page_locators.newsletter)
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+            self.driver.find_element(By.XPATH, "//body").send_keys(Keys.END)
             time.sleep(2)
 
     def get_vertical_offset(self):
@@ -51,9 +52,10 @@ class HomePage(BasePage):
             self.find_element(home_page_locators.search_input).click()
             time.sleep(1)
         with allure.step("Очистить поле поиска"):
-            self.find_element(home_page_locators.search_input).send_keys(Keys.COMMAND, "a")
-            time.sleep(1)
-            self.find_element(home_page_locators.search_input).send_keys(Keys.BACKSPACE)
+            try:
+                self.find_element(home_page_locators.search_input_clear_button).click()
+            except NoSuchElementException:
+                pass
             time.sleep(1)
         with allure.step("Ввести в поисковую строку"):
             self.find_element(home_page_locators.search_input).send_keys(text)
