@@ -7,30 +7,6 @@ from pages.registration_page import RegistrationPage
 from pages.search_page import SearchPage
 
 
-# @pytest.mark.presentation
-# @pytest.mark.non_multiple_CPUs_run
-# @allure.suite("Регистрация")
-# @allure.title("Регистрация пользователя")
-# def test_register(driver):
-#     home_page = HomePage(driver)
-#     registration_page = RegistrationPage(driver)
-#
-#     home_page.open()
-#     home_page.go_to_registration_screen()
-#     registration_page.add_first_client()
-
-# @pytest.mark.presentation
-# @pytest.mark.non_multiple_CPUs_run
-# @allure.suite("Авторизация")
-# @allure.title("Авторизация пользователя с валидными данными")
-# def test_login(driver):
-#     home_page = HomePage(driver)
-#
-#     home_page.open()
-#     home_page.go_to_login_screen()
-#     home_page.fill_login_inputs_with_valid_data_and_submit()
-#
-
 @pytest.mark.presentation
 @pytest.mark.non_multiple_CPUs_run
 @allure.suite("Корзина")

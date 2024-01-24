@@ -1,5 +1,5 @@
 import allure
-from selenium.common import TimeoutException
+from selenium.common import TimeoutException, NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -164,8 +164,11 @@ class BasePage:
 
     def accept_cookies(self):
         with allure.step("Принять cookies"):
-            accept_button = self.find_element(autorization_page_locators.cookies_accept_button)
-            accept_button.click()
+            try:
+                accept_button = self.find_element(autorization_page_locators.cookies_accept_button)
+                accept_button.click()
+            except NoSuchElementException:
+                pass
 
     def convert_price_text_to_number(self, price_text):
         return float(price_text.replace("zł", "").replace(" ", "").replace(",", "."))
