@@ -7,15 +7,13 @@ import json
 
 @allure.suite("Test API")
 @allure.story("Test API")
-@allure.description("Пишем тесты для метода GET")
+@allure.description("Получение главной страницы методом GET")
 @allure.tag("API", "GET")
 @allure.severity(allure.severity_level.NORMAL)
-@allure.label("owner", "maksim tsybulko")
-@allure.link("https://dev.example.com/", name="Website_1")
-@allure.issue("AUTH-123")
-@allure.testcase("TMS-456")
-def test_api_1():
-    url = "https://www.onliner.by/"
+@allure.label("owner", "Tatsiana Malahova")
+@allure.link("https://zalando.pl/", name="Zalando")
+def test_get_main_page():
+    url = "https://zalando.pl/"
 
     payload = {}
     headers = {
@@ -31,157 +29,187 @@ def test_api_1():
     time_end = time.time()
     time_loud = time_end - time_start
 
-    with allure.step('Проверка статус кода '):
-        check.greater_equal(1, time_loud)
-
-    with allure.step('Проверка статус кода '):
+    with allure.step('Проверка статус кода'):
         check.equal(response.status_code, 200, 'Неверый статус код')
 
     with allure.step('Проверка времени ответа страницы'):
-        check.greater_equal(time_loud, 0, 'Неверый статус код')
+        check.greater_equal(time_loud, 0, 'Время ответа страницы меньше нуля')
 
     with allure.step('Проверка наличия Content-Type в headers'):
         check.is_in(response.headers["Content-Type"], "text/html; charset=utf-8")
 
-    with allure.step('Добавить attuch'):
-        allure.attach('Remove error', response.text, attachment_type=allure.attachment_type.TEXT)
-
     with allure.step('Проверка,что метод GET'):
         print(response.request.method)
-        check.not_equal(response.request.method, 'POST')
+        check.equal(response.request.method, 'GET')
 
 
 @allure.suite("Test API")
 @allure.story("Test API")
-@allure.description("Пишем тесты для метода POST")
+@allure.description("Добавление отсутствуеющего продукта в корзину методом POST")
 @allure.tag("API", "POST")
 @allure.severity(allure.severity_level.NORMAL)
-@allure.label("owner", "maksim tsybulko")
-@allure.link("https://dev.example.com/", name="Website_1")
-@allure.issue("AUTH-127")
-@allure.testcase("TMS-4562")
-def test_api_2():
-    url = "https://catalog.onliner.by/api/seo"
+@allure.label("owner", "Tatsiana Malahova")
+@allure.link("https://zalando.pl/", name="Zalando")
+def test_add_to_cart():
+    url = "https://www.zalando.pl/api/graphql/add-to-cart/"
 
-    payload = json.dumps({
-        "test": "test"
-    })
+    payload = json.dumps([
+        {
+            "id": "wrong_id",
+            "variables": {
+                "addToCartInput": {
+                    "productId": "wrong_id",
+                    "clientMutationId": "addToCartMutation"
+                }
+            }
+        }
+    ])
+
     headers = {
         'Accept': '*/*',
         'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
     with allure.step('Проверка статус кода'):
-        check.equal(response.status_code, 422, 'Неверный статус код')
+        check.equal(response.status_code, 200, 'Неверный статус код')
 
     with allure.step('Проверка параметра errors'):
-        a = response.text
-        b = a.find('Unprocessable Content')
-        check.not_equal(b, -1)
+        res = response.json()
+        check.equal(res[0]["errors"][0]["message"], 'Persisted Query "wrong_id" NOT FOUND')
 
 
 @allure.suite("Test API")
 @allure.story("Test API")
-@allure.description("Пишем тесты для метода POST")
+@allure.description("Авторизация методом POST")
 @allure.tag("API", "POST")
 @allure.severity(allure.severity_level.NORMAL)
-@allure.label("owner", "maksim tsybulko")
-@allure.link("https://dev.example.com/", name="Website_1")
-@allure.issue("AUTH-127")
-@allure.testcase("TMS-4562")
-def test_api_3():
-    url = "https://restful-booker.herokuapp.com/auth"
+@allure.label("owner", "Tatsiana Malahova")
+@allure.link("https://zalando.pl/", name="Zalando")
+def test_authorization():
+    url = "https://accounts.zalando.com/api/login"
 
-    data = json.dumps({
-        "username": "admin",
-        "password": "password123"
+    payload = json.dumps({
+        "email": "spgwwnlsdcwzayrvof@cwmxc.com",
+        "secret": "3bbe38c9-32b8-404f-a71d-d780af48e787",
+        "request": {
+            "redirect_uri": "https://www.zalando.pl/sso/callback",
+            "client_id": "fashion-store-web",
+            "response_type": "code",
+            "scope": "openid",
+            "request_id": "huxhXKGKfRBlvUAc:105aaa5e-545c-459b-9206-9f47e66f8aab:huxhXKGKfRBlvUAc",
+            "nonce": "3bbe38c9-32b8-404f-a71d-d780af48e787",
+            "state": "eyJvcmlnaW5hbF9yZXF1ZXN0X3VyaSI6Ii8iLCJ0cyI6IjIwMjQtMDEtMjRUMTk6MTg6NDZaIn0=",
+            "ui_locales": "pl-PL",
+            "zalando_client_id": "105aaa5e-545c-459b-9206-9f47e66f8aab",
+            "sales_channel": "ca9d5f22-2a1b-4799-b3b7-83f47c191489",
+            "client_country": "PL",
+            "client_category": "fs"
+        }
     })
     headers = {
-        'Content-Type': 'application/json'
+        'authority': 'accounts.zalando.com',
+        'accept': 'application/json',
+        'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+        'content-type': 'application/json',
+        'dnt': '1',
+        'origin': 'https://accounts.zalando.com',
+        'referer': 'https://accounts.zalando.com/authenticate?redirect_uri=https://www.zalando.pl/sso/callback&client_id=fashion-store-web&response_type=code&scope=openid&request_id=huxhXKGKfRBlvUAc:105aaa5e-545c-459b-9206-9f47e66f8aab:huxhXKGKfRBlvUAc&nonce=3bbe38c9-32b8-404f-a71d-d780af48e787&state=eyJvcmlnaW5hbF9yZXF1ZXN0X3VyaSI6Ii8iLCJ0cyI6IjIwMjQtMDEtMjRUMTk6MTg6NDZaIn0=&ui_locales=pl-PL&zalando_client_id=105aaa5e-545c-459b-9206-9f47e66f8aab&sales_channel=ca9d5f22-2a1b-4799-b3b7-83f47c191489&client_country=PL&client_category=fs',
+        'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'x-csrf-token': '3d8f5854-012d-4e4c-bdf8-ab9dbb10bf87',
+        'x-flow-id': 'bj7zu0nuv5hgWwxu',
+        'x-zalando-username': 'spgwwnlsdcwzayrvof@cwmxc.com'
     }
 
-    response = requests.request("POST", url, headers=headers, data=data)
+    response = requests.request("POST", url, headers=headers, data=payload)
 
     with allure.step('Проверка статус кода'):
-        check.equal(response.status_code, 200)
-
-    with allure.step('Проверка что значение параметра "token" не пустое'):
-        response_token = response.json()
-        if 'token' in response_token:
-            print(response_token)
-            print(response_token['token'])
-            check.is_not_none(response_token['token'])
-        else:
-            print('Ошибка')
+        check.equal(response.status_code, 403, 'Неверный статус код')
 
 
 @allure.suite("Test API")
 @allure.story("Test API")
-@allure.description("Пишем тесты для метода POST")
+@allure.description("Подписка на новости методом POST")
 @allure.tag("API", "POST")
 @allure.severity(allure.severity_level.NORMAL)
-@allure.label("owner", "maksim tsybulko")
-@allure.link("https://dev.example.com/", name="Website_1")
-@allure.issue("AUTH-127")
-@allure.testcase("TMS-4562")
-def test_api_4():
-    url = "https://restful-booker.herokuapp.com/booking"
+@allure.label("owner", "Tatsiana Malahova")
+@allure.link("https://zalando.pl/", name="Zalando")
+def test_newsletter():
+    url = "https://www.zalando.pl/api/graphql/"
 
+    payload = json.dumps([
+        {
+            "id": "06fe5b50b4218612aa3fa8494df326aef7ff35a75a8563b3455bb53c15168872",
+            "variables": {
+                "input": {
+                    "email": "spgwwnlsdcwzayrvof@cwmxc.com",
+                    "preference": {
+                        "category": "WOMEN",
+                        "topics": [
+                            {
+                                "id": "item_alerts",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "recommendations",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "follow_brand",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "subscription_confirmations",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "stories",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "offers_sales",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "fashion_fix",
+                                "isEnabled": True
+                            },
+                            {
+                                "id": "survey",
+                                "isEnabled": True
+                            }
+                        ]
+                    },
+                    "referrer": "nl_subscription_banner_one_click",
+                    "clientMutationId": "1706125274340"
+                }
+            }
+        }
+    ])
     headers = {
-        'Content-Type': 'application/json'
+        'content-type': 'application/json',
+        'origin': 'https://www.zalando.pl',
+        'referer': 'https://www.zalando.pl/faq/Wysylka-i-dostawa/Czy-dostawa-i-zwrot-cos-kosztuja.html',
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     }
 
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request("POST", url, headers=headers, data=payload)
 
     with allure.step('Проверка статус кода'):
-        check.equal(response.status_code, 200)
+        check.equal(response.status_code, 200, 'Неверный статус код')
+    with allure.step("Проверка подтверждения подписки"):
+        res = response.json()
+        email = res[0]["data"]["subscribeToNewsletter"]["email"]
+        isEmailVerificationRequired = res[0]["data"]["subscribeToNewsletter"]["isEmailVerificationRequired"]
 
-    with allure.step('Проверка метода в запросе'):
-        check.equal(response.request.method, 'GET')
-
-    with allure.step('Проверка что параметр bookingID не пустой'):
-        response_bookingid = response.json()[0]
-        if 'bookingid' in response_bookingid:
-            print(response_bookingid['bookingid'])
-            check.is_not_none(response_bookingid['bookingid'])
-        else:
-            print('Ошибка')
-
-    with allure.step('Проверка что параметр '):
-        response_bookingid = response.json()
-        for book in response_bookingid:
-            if 'bookingid' in book == 1378:
-                pass
-            else:
-                print('Такой книги нет')
-
-
-@allure.suite("Test API")
-@allure.story("Test API")
-@allure.description("Пишем тесты для метода POST")
-@allure.tag("API", "POST")
-@allure.severity(allure.severity_level.NORMAL)
-@allure.label("owner", "maksim tsybulko")
-@allure.link("https://dev.example.com/", name="Website_1")
-@allure.issue("AUTH-127")
-@allure.testcase("TMS-4562")
-def test_api_5():
-    url = "https://restful-booker.herokuapp.com/ping"
-    payload = {}
-    headers = {
-        'Content-Type': 'application/json'
-    }
-
-    response = requests.request("GET", url, headers=headers, data=payload)
-
-    with allure.step('Проверка статус кода'):
-        check.equal(response.status_code, 201)
-
-    with allure.step('Добавить результат в отчет аллюра'):
-        allure.attach(str(response.status_code), name='статус код')
-        allure.attach(str(response.headers), name='headers')
+        check.equal(email, "spgwwnlsdcwzayrvof@cwmxc.com", 'Неверный email')
+        check.equal(isEmailVerificationRequired, True, 'Неверное значение isEmailVerificationRequired')
