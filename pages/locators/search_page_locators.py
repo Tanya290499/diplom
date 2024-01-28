@@ -40,3 +40,6 @@ brand_filter_search_first_result = (
 brand_filter_search_submit = (
     By.XPATH, "(//div[@class='_0xLoFW _4qpPat _9bx9k9']//button)[2]"
 )
+size_filter_search_submit = (
+    By.XPATH, "(//div[@class='_0xLoFW _4qpPat _9bx9k9']//button)[2]"
+)

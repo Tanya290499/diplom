@@ -1,4 +1,3 @@
-import platform
 import time
 
 from selenium.common import NoSuchElementException
@@ -9,7 +8,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
 from pages.base_page import BasePage
-from pages.locators import autorization_page_locators, home_page_locators, clothes_page_locators
+from pages.locators import autorization_page_locators, home_page_locators, clothes_page_locators, search_page_locators
 
 
 class HomePage(BasePage):
@@ -91,10 +90,18 @@ class HomePage(BasePage):
             self.find_element(home_page_locators.all_favorites).click()
 
     def add_item_to_cart(self):
-        with allure.step("Нажать кнопку товара из раздела спорт"):
-            button_sport_all = self.find_element(home_page_locators.button_sport_all)
-            button_sport_all.click()
-        time.sleep(1)
+        with allure.step("Найти сумку"):
+            self.search('Torba Sportowa')
+            time.sleep(2)
+
+        with allure.step("Отфильтровать по размеру one size"):
+            self.find_element(clothes_page_locators.filter_by_size).click()
+            time.sleep(1)
+            self.find_element(clothes_page_locators.filter_by_size_one_size).click()
+            time.sleep(1)
+            with allure.step("Нажать на кнопку подтверждения поиска по размеру"):
+                self.find_element(search_page_locators.size_filter_search_submit).click()
+                time.sleep(2)
 
         title = self.find_element(
             clothes_page_locators.first_element_title
@@ -102,11 +109,6 @@ class HomePage(BasePage):
 
         with allure.step("Перейти на страницу товара"):
             self.find_element(clothes_page_locators.first_element_card).click()
-            time.sleep(1)
-        with allure.step("Выбрать размер"):
-            self.find_element(clothes_page_locators.item_select_size).click()
-            time.sleep(1)
-            self.find_element(clothes_page_locators.item_select_first_size).click()
             time.sleep(1)
         with allure.step("Нажать кнопку добавить в корзину"):
             self.find_element(clothes_page_locators.add_to_cart_button).click()

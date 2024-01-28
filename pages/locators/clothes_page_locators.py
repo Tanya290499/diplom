@@ -24,3 +24,9 @@ cart_popup_button = (
 cart_quantity_badge = (
     By.XPATH, "//div[@data-testid='shopping-bag-badge']//span"
 )
+filter_by_size = (
+    By.XPATH, "(//button[@data-testid='filter-count'])[1]"
+)
+filter_by_size_one_size = (
+    By.XPATH, "//label[@for='sizes-One Size']"
+)

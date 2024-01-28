@@ -3,7 +3,6 @@ import pytest
 import allure
 from pages.cart_page import CartPage
 from pages.home_page import HomePage
-from pages.registration_page import RegistrationPage
 from pages.search_page import SearchPage
 
 

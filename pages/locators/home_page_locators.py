@@ -15,7 +15,6 @@ agree_rules = (
     By.XPATH, "//label[@class='RyEgWR KxHAYs _2kjxJ6 FxZV-M r1svAh JT3_zV _5Yd-hZ _4F506m IxoCOT']"
 )
 cookies_accept_button = (By.XPATH, "//button[@id='uc-btn-accept-banner']")
-button_sport_all = (By.XPATH, "//a[@href='https://www.zalando.pl/sport-kobiety/']")
 button_favorites = (By.XPATH, "//div[@class='egPhqr navToolItem-wishlist']")
 all_favorites = (By.XPATH, "(//span[@class='sDq_FX _2kjxJ6 FxZV-M Yb63TQ SpRgR2 r9BRio'])[1]")
 picture_first = (
